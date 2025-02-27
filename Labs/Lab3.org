@@ -56,8 +56,8 @@ For reference:
      *Endpoint ID*.
 
 2) To test your model:
-   - Create a file =dm3.js= which implements a very basic ASR test
-     (analogous to =dm.js= in this repository). Add the following to
+   - Create a file =dm3.ts= which implements a very basic ASR test
+     (analogous to =dm.ts= in this repository). Add the following to
      your =settings= object:
      #+begin_src javascript
        speechRecognitionEndpointId: "paste your Endpoint ID here",
