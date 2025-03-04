@@ -1,0 +1,9 @@
+<!--ID=B7267351-473F-409D-9765-754A8EBCDE05;Version=1|{"VoiceNameToIdMapItems":[{"Name":"Microsoft Server Speech Text to Speech Voice (en-US, JennyNeural)","ShortName":"en-US-JennyNeural","Locale":"en-US","Id":"e5e4f59b-65c6-42b2-a6e3-5985d1a1ea07","VoiceType":"StandardVoice"}]}-->
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" xml:lang="en-US"><voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">            Stray birds of summer <break time="300ms" /> come to my window <break time="200ms" /></prosody></voice>
+<voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">to sing <emphasis level="moderate">and fly away. </emphasis>
+<break time="500ms" /></prosody></voice>
+<voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">And yellow leaves of autumn, <break time="300ms" /></prosody></voice>
+<voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">which have no songs, <break time="200ms" /></prosody></voice>
+<voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">flutter and fall there <break time="300ms" /></prosody></voice>
+<voice name="en-US-JennyNeural"><prosody rate="slow" pitch="medium">with a sigh.
+        </prosody></voice></speak>
