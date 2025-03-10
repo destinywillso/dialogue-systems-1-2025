@@ -1,0 +1,635 @@
+{
+    "projectFileVersion": "2024-11-15-preview",
+    "stringIndexType": "Utf16CodeUnit",
+    "metadata": {
+        "projectKind": "Conversation",
+        "settings": {
+            "confidenceThreshold": 0,
+            "normalizeCasing": false,
+            "augmentDiacritics": false
+        },
+        "projectName": "lab4",
+        "multilingual": true,
+        "description": "",
+        "language": "en-us"
+    },
+    "assets": {
+        "projectKind": "Conversation",
+        "intents": [
+            {
+                "category": "None"
+            },
+            {
+                "category": "create a meeting"
+            },
+            {
+                "category": "who is X"
+            }
+        ],
+        "entities": [
+            {
+                "category": "person_name",
+                "compositionSetting": "combineComponents",
+                "prebuilts": [
+                    {
+                        "category": "Person.Name"
+                    }
+                ],
+                "requiredComponents": [
+                    "learned",
+                    "prebuilts"
+                ]
+            },
+            {
+                "category": "meeting_title",
+                "compositionSetting": "combineComponents",
+                "list": {
+                    "sublists": [
+                        {
+                            "listKey": "Project Closure Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Project Closure Meeting",
+                                        "Closure",
+                                        "Project Wrap-up"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "One-on-One Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "One-on-One Meeting",
+                                        "1:1 Meeting",
+                                        "Individual Meeting"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "All Hands Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "All Hands Meeting",
+                                        "All-Staff Meeting",
+                                        "All-Hands"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Quarterly Review Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Quarterly Review Meeting",
+                                        "Quarterly Meeting",
+                                        "Review Meeting"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Brainstorming Session",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Brainstorming Session",
+                                        "Idea Session",
+                                        "Brainstorm"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Strategy Planning Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Strategy Planning Meeting",
+                                        "Strategic Meeting",
+                                        "Planning Session"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Client Communication Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Client Communication Meeting",
+                                        "Client Meeting",
+                                        "Client Call"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Daily Standup Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Daily Standup Meeting",
+                                        "Daily Standup",
+                                        "Standup Meeting"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Team Weekly Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Team Weekly Meeting",
+                                        "Weekly Meeting",
+                                        "Team Sync"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "listKey": "Project Kickoff Meeting",
+                            "synonyms": [
+                                {
+                                    "language": "en-us",
+                                    "values": [
+                                        "Project Kickoff Meeting",
+                                        "Kickoff",
+                                        "Project Start"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "requiredComponents": [
+                    "learned",
+                    "list"
+                ]
+            },
+            {
+                "category": "meeting_time",
+                "compositionSetting": "combineComponents",
+                "prebuilts": [
+                    {
+                        "category": "DateTime"
+                    }
+                ],
+                "requiredComponents": [
+                    "learned",
+                    "prebuilts"
+                ]
+            },
+            {
+                "category": "yes_no",
+                "compositionSetting": "combineComponents",
+                "prebuilts": [
+                    {
+                        "category": "Choice.Boolean"
+                    }
+                ],
+                "requiredComponents": [
+                    "learned",
+                    "prebuilts"
+                ]
+            }
+        ],
+        "utterances": [
+            {
+                "text": "Can you schedule a [meeting_title] meeting for [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Arrange a [meeting_title] on [meeting_time] for me.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Please organize a [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I’d like to schedule a [meeting_title] on [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Book a [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you create a [meeting_title] meeting at [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Please set up a meeting for [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Could you schedule a [meeting_title] for [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Let’s arrange a [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Create a meeting for [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you add a [meeting_title] to the calendar for [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Make a meeting for [meeting_title] on [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Please book a [meeting_title] meeting for [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I want to create a [meeting_title] on [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you organize a [meeting_title] on [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Set up a meeting titled [meeting_title] at [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I need to schedule a [meeting_title] on [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Arrange a [meeting_title] for [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you set up a [meeting_title] meeting for [meeting_time]?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Schedule a [meeting_title] on [meeting_time].",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you give me some info on [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Tell me about the person called [person_name].",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is the [person_name] I need to talk to?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is in charge of [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What is [person_name]’s position?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What’s the background of [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you introduce [person_name] to me?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Is [person_name] an important person?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is [person_name] in relation to the project?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Could you describe [person_name] for me?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What is [person_name] known for?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Do you know who [person_name] is?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What’s [person_name]'s role?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you explain who [person_name] is?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is [person_name] in the team?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Tell me more about [person_name].",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is the person named [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What do you know about [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you tell me who [person_name] is?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is [person_name]?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Where was Charles Darwin born?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What contributions did Winston Churchill make?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What is Marie Curie famous for?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Tell me the biography of Thomas Edison.",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you explain who Steve Jobs was?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Who is Albert Einstein?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Was Isaac Newton a scientist?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Give me some background information on Beethoven.",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I'd like to know more about Nikola Tesla.",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "What can you tell me about William Shakespeare?",
+                "language": "en-us",
+                "intent": "who is X",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Arrange a team meeting for next week.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Organize a video call with my colleagues.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Plan a meeting for the sales team this afternoon.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I want to book a room for a business meeting.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Can you schedule a Google Meet call for me?",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Create a new calendar event for our project discussion.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "I need to arrange a meeting with my manager.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Set up a Zoom meeting for next Monday.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Book a conference call for my team.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            },
+            {
+                "text": "Schedule a meeting for tomorrow at 3 PM.",
+                "language": "en-us",
+                "intent": "create a meeting",
+                "entities": [],
+                "dataset": "Train"
+            }
+        ]
+    }
+}
