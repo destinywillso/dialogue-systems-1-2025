@@ -1,6 +1,13 @@
 #+OPTIONS: toc:t num:nil
 #+TITLE: Lab V. Advanced dialogue management
 
+|:warning:|
+*Before you proceed*: update speechstate to the latest version!
+#+begin_src sh
+  yarn up speechstate
+#+end_src
+
+
 * Part 1 (one VG point).  Improving your voice interface
 In this part of the lab you will need to improve your application from
 Labs II and IV. Copy =dm4.ts to new file =dm5.ts= and 're-route' =main.ts= to
