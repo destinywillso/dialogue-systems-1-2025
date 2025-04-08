@@ -1,21 +1,23 @@
 import { Hypothesis, SpeechStateExternalEvent } from "speechstate";
 import { AnyActorRef } from "xstate";
 
-export interface NLUValue {
-  topIntent: string; 
-  entities: Record<string, any>; 
+export interface nluResult {
+  topIntent: string;         
+  entities: NluEntity[];  
 }
 
+export interface NluEntity {
+  category: string;         
+  text: string;            
+  value?: any;            
+}
 export interface DMContext {
   spstRef: AnyActorRef;
   lastResult: Hypothesis[] | null;
-  person?: string; 
-  day?: string;
-  time?: string;
-  allDay?: boolean;
-  yesNo?: "yes" | "no";
-  nluValue: any;    
-  }
-  
+  person: string | null;
+  day: string | null;
+  time: string | null;
+  NluResult: nluResult | null;
+}
 
 export type DMEvents = SpeechStateExternalEvent | { type: "CLICK" };
