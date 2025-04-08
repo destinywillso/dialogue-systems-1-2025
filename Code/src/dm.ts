@@ -7,8 +7,7 @@ import { DMContext, DMEvents } from "./types";
 const inspector = createBrowserInspector();
 
 const azureCredentials = {
-  endpoint:
-    "https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issuetoken",
+  endpoint: "https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issuetoken",
   key: KEY,
 };
 
@@ -25,54 +24,54 @@ interface GrammarEntry {
   person?: string;
   day?: string;
   time?: string;
+  confirm?: string;
 }
 
 const grammar: { [index: string]: GrammarEntry } = {
   vlad: { person: "Vladislav Maraev" },
   aya: { person: "Nayat Astaiza Soriano" },
   victoria: { person: "Victoria Daniilidou" },
-  g : { person: "Gong tianyi"},
+  ty: {person: "Gong TianYi"}, 
   monday: { day: "Monday" },
   tuesday: { day: "Tuesday" },
-  today: { day: "today" },
-  tomorrow: { day: "tomorrow" },
+  wednesday: { day: "Wednesday" },
+  thursday: { day: "Thursday" },
+  friday: { day: "Friday" },
+  saturday: { day: "Saturday" },
+  sunday: { day: "Sunday" },
+  today: {day: "Today"},
+  tomorrow: {day: "Tomorrow"},
+  "9": { time: "09:00" },
   "10": { time: "10:00" },
   "11": { time: "11:00" },
-  "10 am": { time: "10:00" },
-  "10 o’clock": { time: "10:00" },
-  "11 am": { time: "11:00" },
-  "2 pm": { time: "14:00" },
+  "12": { time: "12:00" },
+  "13": { time: "13:00" },
   "14": { time: "14:00" },
-  "16:30": { time: "16:30" },
-
+  "15": { time: "15:00" },
+  "16": { time: "16:00" },
+  "17": { time: "17:00" },
+  "18": { time: "18:00" },
+  yes: { confirm: "yes"},
+  ok: { confirm: "yes"},
+  sure: { confirm: "yes"},
+  no: { confirm: "no"},
 };
-
-
-const yesorNo: { [index: string]: "yes" | "no" } = {
-  yes: "yes",
-  "of course": "yes",
-  sure: "yes",
-  absolutely: "yes",
-
-  no: "no",
-  "no way": "no",
-  nope: "no",
-  nah: "no",
-};
-
-function YesNo(utterance: string): "yes" | "no" | null {
-  const normalized = utterance.toLowerCase().trim();
-  const result = yesorNo[normalized];
-  return result ?? null;
-}
-
-function isInGrammar(utterance: string) {
-  return utterance.toLowerCase() in grammar;
-}
 
 function getPerson(utterance: string) {
   return (grammar[utterance.toLowerCase()] || {}).person;
 }
+
+function getDay(utterance: string) {
+  return (grammar[utterance.toLowerCase()] || {}).day;
+}
+
+function getDecision(utterance: string) {
+  return (grammar[utterance.toLowerCase()] || {}).confirm
+}
+function getTime(utterance: string) {
+  return (grammar[utterance.toLowerCase()] || {}).time;
+}
+
 
 const dmMachine = setup({
   types: {
@@ -96,6 +95,9 @@ const dmMachine = setup({
   context: ({ spawn }) => ({
     spstRef: spawn(speechstate, { input: settings }),
     lastResult: null,
+    person: null,
+    day: null,
+    time: null, 
   }),
   id: "DM",
   initial: "Prepare",
@@ -104,109 +106,235 @@ const dmMachine = setup({
       entry: ({ context }) => context.spstRef.send({ type: "PREPARE" }),
       on: { ASRTTS_READY: "WaitToStart" },
     },
+
     WaitToStart: {
       on: { CLICK: "Greeting" },
     },
+
     Greeting: {
-      initial: "Prompt",
+      entry: { type: "spst.speak", params: { utterance: `Let's create an appointment.` } },
+      on: { SPEAK_COMPLETE: "Start" },
+    },
+
+    Start: {
+      initial : "Person",
       on: {
-        LISTEN_COMPLETE: [
-          {
-            target: "CheckGrammar",
-            guard: ({ context }) => !!context.lastResult, 
-          },
-          { target: ".NoInput" }, 
-        ],
+        RECOGNISED: {
+          actions: assign(({ event }) => {
+            return { lastResult: event.value };
+          }),
+        },
+        ASR_NOINPUT: {
+          actions: assign({ lastResult: null }),
+        },
+        CLICK: "Done"
       },
+
       states: {
-        Prompt: {
-          entry: { type: "spst.speak", params: { utterance: `Hello world!` } },
-          on: { SPEAK_COMPLETE: "Ask" },
-        },
-        NoInput: {
-          entry: {
-            type: "spst.speak",
-            params: { utterance: `I can't hear you!` },
-          },
-          on: { SPEAK_COMPLETE: "Ask" },
-        },
-        Ask: {
-          entry: { type: "spst.listen" },
-          on: {
-            RECOGNISED: {
-              actions: assign(({ event }) => {
-                return { lastResult: event.value };
-              }),
+        Person : {
+          initial : "Prompt",
+          states:{
+            Prompt : {
+              entry: { type: "spst.speak", params: { utterance: `Who are you meeting with?` } },
+              on: { SPEAK_COMPLETE: "Next" },
             },
-            ASR_NOINPUT: {
-              actions: assign({ lastResult: null }),
+            Next : {
+              entry: { type: "spst.listen" },
+              on: {
+                LISTEN_COMPLETE: [
+                  {
+                    target: "#DM.Start.Day",
+                    guard: ({ context }) => !!context.lastResult && !!getPerson(context.lastResult![0].utterance),
+                    actions: assign(({ context }) => {
+                      return { person: getPerson(context.lastResult![0].utterance)}
+                    })
+                  },
+                  {
+                    target: "TryAgain",
+                  }
+                ],
+              },
             },
-          },
+            TryAgain : {
+              entry: {type: "spst.speak",
+                params: ({context}) => ({
+                  utterance: !!context.lastResult && "I can't hear you" || "I did not hear you.",
+                  })
+              },
+              on: {SPEAK_COMPLETE: "Prompt"},
+            },
+          }
+        },
+
+        Day: {
+          initial: "Prompt",
+          states : {
+            Prompt : {
+              entry: { type: "spst.speak", params: { utterance: `On which day is your meeting?` } },
+              on: { SPEAK_COMPLETE: "Next" },
+            },
+            Next : {
+              entry: { type: "spst.listen" },
+              on: {
+                LISTEN_COMPLETE: [
+                  {
+                    target: "#DM.Start.IFWholeDay",
+                    guard: ({ context }) => !!context.lastResult && !!getDay(context.lastResult![0].utterance),
+                    actions: assign(({ context }) => {
+                      return { day: getDay(context.lastResult![0].utterance)};
+                    }),
+                  },
+                  {
+                    target: "TryAgain",
+                  }
+                ],
+              },
+            },
+            TryAgain : {
+              entry: {type: "spst.speak",
+                params: ({context}) => ({
+                  utterance: (!!context.lastResult && "That is not a day I know. Please specify a day of the week.") || "I did not hear you.",
+                })
+              },
+              on: {SPEAK_COMPLETE: "Prompt"},
+            },
+          }
+        },
+
+        IFWholeDay : {
+          initial: "Prompt",
+          states: {
+            Prompt : {
+              entry: {type: "spst.speak", params: { utterance: `Will it take the whole day?`}},
+              on: { SPEAK_COMPLETE: "Next"}
+            },
+    
+            Next: {
+              entry: {type: "spst.listen" },
+              on: {
+                LISTEN_COMPLETE: [
+                  {
+                    target: "#DM.Start.Confirm",
+                    guard: ({ context }) => !!context.lastResult && getDecision(context.lastResult![0].utterance) == `yes`,
+                  },
+                  {
+                    target: "#DM.Start.Time",
+                    guard: ({ context }) => !!context.lastResult && getDecision(context.lastResult![0].utterance) == `no`,
+                  },
+                  {
+                    target: "TryAgain",
+                  }
+                ],
+              },
+            },
+            TryAgain : {
+              entry: {type: "spst.speak",
+                params: ({context}) => ({
+                  utterance: (!!context.lastResult &&  "I did not understand what you said.") || "I did not hear you." ,
+                })
+              },
+              on: {SPEAK_COMPLETE: "Prompt"},
+            },
+          }
+        },
+
+        Time : {
+          initial: "Prompt",
+          states: {
+            Prompt : {
+              entry: {type: "spst.speak", params: {utterance: `What time is your meeting`}},
+              on: {SPEAK_COMPLETE: "Next"},
+            },
+    
+            Next : {
+              entry: {type: "spst.listen"},
+              on: {
+                LISTEN_COMPLETE: [
+                  {
+                    target: "#DM.Start.Confirm",
+                    guard: ({ context }) => !!context.lastResult && !!getTime(context.lastResult![0].utterance),
+                    actions: assign(({ context }) => {
+                      return { time: getTime(context.lastResult![0].utterance)};
+                    }),
+                  },
+                  {
+                    target: "TryAgain",
+                  }
+                ],
+              },
+            },
+            TryAgain : {
+              entry: {type: "spst.speak",
+                params: ({context}) => ({
+                  utterance: (!!context.lastResult && "I don't recognize that time.") || "I did not hear you.",
+                })
+              },
+              on: {SPEAK_COMPLETE: "Prompt"},
+            },
+          }
+        },
+
+        Confirm : {
+          initial: "Prompt",
+          states: {
+            Prompt : {
+              entry: {
+                type: "spst.speak", 
+                params: ({ context }) => ({
+                  utterance: `Do you want me to create an appointment with ${context.person} on ${context.day} ${!!context.time ? "at " + context.time : "for the whole day"}?`,
+                }),
+              },
+              on : {SPEAK_COMPLETE: "Next"},
+            },
+            Next: {
+              entry: {type: "spst.listen"},
+              on: {
+                LISTEN_COMPLETE: [
+                  {
+                    target: "#DM.Done",
+                    guard: ({ context }) => !!context.lastResult && getDecision(context.lastResult![0].utterance) == `yes`,
+                  },
+                  {
+                    target: "Back",
+                    guard: ({ context }) => !!context.lastResult && getDecision(context.lastResult![0].utterance) == `no`,
+                  },
+                  {
+                    target: "Again",
+                  }
+                ],
+              },
+            },
+            Again : {
+              entry: {type: "spst.speak",
+                params: ({context}) => ({
+                  utterance: (!!context.lastResult && "I did not understand what you just said." ) || "I cannot hear you.",
+                })
+              },
+              on: {SPEAK_COMPLETE: "Prompt"},
+            },
+            Back: {
+              entry: {type: "spst.speak", params: {utterance: `OK,We will start again.`}},
+              on: {SPEAK_COMPLETE: {
+                target: "#DM.Start.Person",
+                actions: assign({ time: null, person: null, day: null}),
+                }
+              }
+            },
+          }
         },
       },
     },
-    CheckGrammar: {
-      entry: {
-        type: "spst.speak",
-        params: ({ context }) => {
-          const utterance = context.lastResult?.[0]?.utterance || "";
-
-          if (!utterance) {
-            return { utterance: "I didn't hear anything. Can you speak again?" };
+    Done : {
+      entry: {type: "spst.speak", params: {utterance: `Your appointment has been created!`}},
+      on : {
+        CLICK: {
+            target: "Greeting",
+            actions: assign({ time: null, person: null, day: null}),
           }
-
-          const yesNo = YesNo(utterance);
-          if (yesNo === "yes") {
-            return { utterance: `You said yes!` };
-          } else if (yesNo === "no") {
-            return { utterance: `You said no!` };
-          }
-
-          const person = getPerson(utterance);
-          if (person) {
-            return { utterance: `You mentioned ${person}.` };
-          }
-
-          if (!isInGrammar(utterance)) {
-            return { utterance: `I don't understand the phrase: "${utterance}". Can you speak again?` };
-          }
-
-          return {
-            utterance: `You just said: ${utterance}. And it ${
-              isInGrammar(utterance) ? "is" : "is not"
-            } in the grammar.`,
-          };
-        },
-      },
-      on: {
-        SPEAK_COMPLETE: [
-          {
-            target: "Greeting.Ask",
-            guard: ({ context }) =>
-              !context.lastResult ||
-              !isInGrammar(context.lastResult[0]?.utterance), 
-          },
-          { target: "Success" },
-          { target: "Done" },
-        ],
-      },
-    },
-    Done: {
-      on: {
-        CLICK: "Greeting", 
-      },
-    },
-    Success: {
-      entry: {
-        type: "spst.speak",
-        params: { utterance: "Good" },
-      },
-      on: { SPEAK_COMPLETE: "Done" },
-    },
+      }
+    }
   },
 });
-
-
 
 const dmActor = createActor(dmMachine, {
   inspect: inspector.inspect,
@@ -232,3 +360,4 @@ export function setupButton(element: HTMLButtonElement) {
     element.innerHTML = `${meta.view}`;
   });
 }
+
